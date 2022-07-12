@@ -10,15 +10,16 @@ import UserNotifications
 
 class ViewController: UIViewController {
     
-    let testNotificationButton = UIButton(type: .system)
-    let setNotificationButton = UIButton(type: .system)
-    let datePicker = UIDatePicker()
+    private let testNotificationButton = UIButton(type: .system)
+    private let setNotificationButton = UIButton(type: .system)
+    private let datePicker = UIDatePicker()
     
-    let stackView = UIStackView()
+    private let stackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 通知の許可を得る
         let center = UNUserNotificationCenter.current()
         center.delegate = self
         center.requestAuthorization(options: [.alert, .sound], completionHandler: { (granted, error) in })
@@ -46,18 +47,22 @@ class ViewController: UIViewController {
         setNotificationButton.addTarget(self, action: #selector(setNotification(sender: )), for: .touchUpInside)
     }
     
-    @objc func testNotification(sender: UIButton) {
+    /// 0.5秒後に通知
+    @objc private func testNotification(sender: UIButton) {
         let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 0.5, repeats: false)
         showNotification(trigger: trigger)
     }
     
-    @objc func setNotification(sender: UIButton) {
-        let dateComponents = Calendar.current.dateComponents(in: TimeZone.current, from: datePicker.date)
+    /// datePickerの日時に通知
+    @objc private func setNotification(sender: UIButton) {
+        // datePickerで取れるのはDate型なので、必要なパラメータをdateComponentsに変換
+        let dateComponents = Calendar.current.dateComponents([.calendar, .year, .month, .day, .hour, .minute], from: datePicker.date)
         let trigger = UNCalendarNotificationTrigger.init(dateMatching: dateComponents, repeats: false)
         showNotification(trigger: trigger)
     }
     
-    func showNotification(trigger: UNNotificationTrigger) {
+    /// 通知の設定
+    private func showNotification(trigger: UNNotificationTrigger) {
         let content = UNMutableNotificationContent()
         content.title = "Notification"
         content.body = "This is a notification"
@@ -66,12 +71,16 @@ class ViewController: UIViewController {
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest.init(identifier: uuidString, content: content, trigger: trigger)
         let center = UNUserNotificationCenter.current()
-        center.add(request) { (error) in print(error as Any) }
+        center.add(request) { (error) in
+            guard let error = error else { return }
+            print(error)
+        }
         print(trigger)
     }
 }
 
 extension ViewController: UNUserNotificationCenterDelegate {
+    /// アプリがフォアグラウンド時にも通知を表示する
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound])
     }

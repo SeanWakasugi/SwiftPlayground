@@ -27,18 +27,29 @@ class DispatchQueueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let cityIDs: [String] = ["011000", "012010", "012020", "013010", "013020", "013030", "014010", "014020", "014030", "015010", "015020", "016010", "016020", "016030", "017010", "017020"]
-        getForecastAPIs(cityIDs: cityIDs)
+        getForecastAPIs(cityIDs: cityIDs) {
+            self.tableView.dataSource = self
+            self.tableView.reloadData()
+        }
         
     }
     
-    func getForecastAPIs(cityIDs: [String]) {
-        cityIDs.enumerated().forEach ( { (index, cityID) in
-            getForecastAPI(cityID: cityID) { forecastResponse in
-            self.forecastStrings.append(String(index) + forecastResponse.title + " は " + forecastResponse.forecasts[0].telop)
-            self.tableView.dataSource = self
-            self.tableView.reloadData()
+    func getForecastAPIs(cityIDs: [String], completion: @escaping (() -> Void)) {
+        let dispatchQueue = DispatchQueue.global()
+        let dispatchGroup = DispatchGroup()
+        dispatchQueue.async {
+            cityIDs.enumerated().forEach ( { (index, cityID) in
+                dispatchGroup.enter()
+                self.getForecastAPI(cityID: cityID) { forecastResponse in
+                        self.forecastStrings.append(String(index) + forecastResponse.title + " は " + forecastResponse.forecasts[0].telop)
+                        dispatchGroup.leave()
+                }
+                dispatchGroup.wait()
+            })
+            DispatchQueue.main.async {
+                completion()
             }
-        })
+        }
     }
     
     func getForecastAPI(cityID: String, completion: @escaping ((ForecastResponse) -> Void)) {

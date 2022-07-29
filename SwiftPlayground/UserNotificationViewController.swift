@@ -8,7 +8,7 @@
 import UIKit
 import UserNotifications
 
-class ViewController: UIViewController {
+class UserNotificationViewController: UIViewController {
     
     private let testNotificationButton = UIButton(type: .system)
     private let setNotificationButton = UIButton(type: .system)
@@ -79,7 +79,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: UNUserNotificationCenterDelegate {
+extension UserNotificationViewController: UNUserNotificationCenterDelegate {
     /// アプリがフォアグラウンド時にも通知を表示する
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound])

@@ -10,7 +10,8 @@ import UIKit
 import Alamofire
 
 struct ForecastResponse: Decodable {
-    var forecasts: [Forecast]
+    let title: String
+    let forecasts: [Forecast]
     
     struct Forecast: Decodable {
         let date: String
@@ -21,19 +22,27 @@ struct ForecastResponse: Decodable {
 class DispatchQueueViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    var forecasts: [ForecastResponse.Forecast] = []
+    var forecastStrings: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        getForecastAPI { forecastResponse in
-            self.forecasts = forecastResponse.forecasts
-            self.tableView.dataSource = self
-            self.tableView.reloadData()
-        }
+        let cityIDs: [String] = ["011000", "012010", "012020", "013010", "013020", "013030", "014010", "014020", "014030", "015010", "015020", "016010", "016020", "016030", "017010", "017020"]
+        getForecastAPIs(cityIDs: cityIDs)
+        
     }
     
-    func getForecastAPI(completion: @escaping ((ForecastResponse) -> Void)) {
-        AF.request("https://weather.tsukumijima.net/api/forecast/city/400040").responseDecodable(of: ForecastResponse.self, decoder: JSONDecoder()) { forecastResponse in
+    func getForecastAPIs(cityIDs: [String]) {
+        cityIDs.enumerated().forEach ( { (index, cityID) in
+            getForecastAPI(cityID: cityID) { forecastResponse in
+            self.forecastStrings.append(String(index) + forecastResponse.title + " は " + forecastResponse.forecasts[0].telop)
+            self.tableView.dataSource = self
+            self.tableView.reloadData()
+            }
+        })
+    }
+    
+    func getForecastAPI(cityID: String, completion: @escaping ((ForecastResponse) -> Void)) {
+        AF.request("https://weather.tsukumijima.net/api/forecast/city/\(cityID)").responseDecodable(of: ForecastResponse.self, decoder: JSONDecoder()) { forecastResponse in
             switch forecastResponse.result {
             case .success(let response):
                 completion(response)
@@ -47,12 +56,12 @@ class DispatchQueueViewController: UIViewController {
 
 extension DispatchQueueViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return forecasts.count
+        return forecastStrings.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel!.text = forecasts[indexPath.row].date + forecasts[indexPath.row].telop
+        cell.textLabel!.text =  forecastStrings[indexPath.row]
         return cell
     }
 }

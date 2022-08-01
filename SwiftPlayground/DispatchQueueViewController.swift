@@ -38,22 +38,29 @@ class DispatchQueueViewController: UIViewController {
         let dispatchQueue = DispatchQueue.global()
         let dispatchGroup = DispatchGroup()
         dispatchQueue.async {
+            // globalキュー
             cityIDs.enumerated().forEach ( { (index, cityID) in
                 dispatchGroup.enter()
                 self.getForecastAPI(cityID: cityID) { forecastResponse in
-                        self.forecastStrings.append(String(index) + forecastResponse.title + " は " + forecastResponse.forecasts[0].telop)
-                        dispatchGroup.leave()
+                    // mainキュー
+                    self.forecastStrings.append(String(index) + forecastResponse.title + " は " + forecastResponse.forecasts[0].telop)
+                    dispatchGroup.leave()
                 }
+                // globalキュー
                 dispatchGroup.wait()
             })
+            // globalキュー
             DispatchQueue.main.async {
+                // mainキュー(画面を触るのでmainである必要がある)
                 completion()
             }
         }
     }
     
     func getForecastAPI(cityID: String, completion: @escaping ((ForecastResponse) -> Void)) {
+        // globalキュー
         AF.request("https://weather.tsukumijima.net/api/forecast/city/\(cityID)").responseDecodable(of: ForecastResponse.self, decoder: JSONDecoder()) { forecastResponse in
+            // mainキュー(Alamofireの仕様)
             switch forecastResponse.result {
             case .success(let response):
                 completion(response)

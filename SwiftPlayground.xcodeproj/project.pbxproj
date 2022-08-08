@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2A6DA4C7289383C400439252 /* DispatchQueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A6DA4C6289383C400439252 /* DispatchQueueViewController.swift */; };
+		2AB988EC289CEC570059A304 /* pageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AB988EB289CEC570059A304 /* pageViewController.swift */; };
 		2ABC0F2428782168004955CE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABC0F2328782168004955CE /* AppDelegate.swift */; };
 		2ABC0F2628782168004955CE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABC0F2528782168004955CE /* SceneDelegate.swift */; };
 		2ABC0F2828782168004955CE /* UserNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ABC0F2728782168004955CE /* UserNotificationViewController.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		2A6DA4C6289383C400439252 /* DispatchQueueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueViewController.swift; sourceTree = "<group>"; };
+		2AB988EB289CEC570059A304 /* pageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pageViewController.swift; sourceTree = "<group>"; };
 		2ABC0F2028782168004955CE /* SwiftPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2ABC0F2328782168004955CE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2ABC0F2528782168004955CE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 				2ABC0F2528782168004955CE /* SceneDelegate.swift */,
 				2ABC0F2728782168004955CE /* UserNotificationViewController.swift */,
 				2A6DA4C6289383C400439252 /* DispatchQueueViewController.swift */,
+				2AB988EB289CEC570059A304 /* pageViewController.swift */,
 				2ABC0F2928782168004955CE /* Main.storyboard */,
 				2ABC0F2C2878216A004955CE /* Assets.xcassets */,
 				2ABC0F2E2878216A004955CE /* LaunchScreen.storyboard */,
@@ -213,6 +216,7 @@
 				2ABC0F2828782168004955CE /* UserNotificationViewController.swift in Sources */,
 				2ABC0F2428782168004955CE /* AppDelegate.swift in Sources */,
 				2ABC0F2628782168004955CE /* SceneDelegate.swift in Sources */,
+				2AB988EC289CEC570059A304 /* pageViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

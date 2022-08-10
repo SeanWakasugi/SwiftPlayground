@@ -29,6 +29,9 @@
                                         <rect key="frame" x="0.0" y="40.5" width="350" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Start"/>
+                                        <connections>
+                                            <action selector="didPressCountButton:" destination="Ces-Ef-2e7" eventType="touchUpInside" id="7WY-IN-79M"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -45,6 +48,9 @@
                                         <rect key="frame" x="0.0" y="40.5" width="350" height="31"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="現在の時刻"/>
+                                        <connections>
+                                            <action selector="didPressTimeButton:" destination="Ces-Ef-2e7" eventType="touchUpInside" id="uEn-j8-93C"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>

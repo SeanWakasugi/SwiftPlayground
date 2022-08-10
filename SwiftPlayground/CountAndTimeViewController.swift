@@ -15,6 +15,8 @@ class CountAndTimeViewController: UIViewController {
     
     var count: Int = 0
     
+    var isTimerOn: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,8 +25,13 @@ class CountAndTimeViewController: UIViewController {
     }
     
     @IBAction func didPressCountButton(_ sender: UIButton) {
-        countUp()
-            
+        isTimerOn = !isTimerOn
+        if isTimerOn {
+            sender.setTitle("Stop", for: .normal)
+            countUp()
+        } else {
+            sender.setTitle("Start", for: .normal)
+        }
     }
     
     @IBAction func didPressTimeButton(_ sender: UIButton) {
@@ -32,8 +39,15 @@ class CountAndTimeViewController: UIViewController {
     }
     
     func countUp() {
-        count = count + 1
-        countLabel.text = String(count)
+        DispatchQueue.global().async {
+            while self.isTimerOn {
+                Thread.sleep(forTimeInterval: 0.5)
+                self.count = self.count + 1
+                DispatchQueue.main.async {
+                    self.countLabel.text = String(self.count)
+                }
+            }
+        }
     }
     
     func setTimeLabel() {

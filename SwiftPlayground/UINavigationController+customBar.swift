@@ -18,7 +18,6 @@ extension UINavigationController {
         self.navigationBar.tintColor = item
         self.navigationBar.standardAppearance = appearance
         self.navigationBar.scrollEdgeAppearance = appearance
-        self.navigationBar.compactAppearance
     }
     
     func defaultBar() {

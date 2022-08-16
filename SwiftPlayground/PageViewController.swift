@@ -19,9 +19,6 @@ class RootPageViewController: UIViewController {
     var cacheIndex: Int?
     
     override func viewDidLoad() {
-        pageControl.numberOfPages = controllers.count
-        didMovePage()
-        
         // ContainerViewで持っているUIPageViewControllerをselfのpageViewControllerに設定
         self.pageViewController = children.first! as? UIPageViewController
         
@@ -33,6 +30,9 @@ class RootPageViewController: UIViewController {
         pageViewController.setViewControllers([controllers[index]], direction: .forward, animated: false)
         pageViewController.dataSource = self
         pageViewController.delegate = self
+        
+        pageControl.numberOfPages = controllers.count
+        didMovePage()
     }
     
     @IBAction func didPressBackButton(_ sender: UIButton) {
@@ -45,6 +45,7 @@ class RootPageViewController: UIViewController {
     }
     
     @IBAction func didPressNextButton(_ sender: UIButton) {
+        // アニメーション中は画面を触れなくする
         view.isUserInteractionEnabled = false
         animateToNextPage() { [weak self] in
             self?.didMovePage()
@@ -55,18 +56,14 @@ class RootPageViewController: UIViewController {
     func animateToPreviousPage(completion: @escaping (()-> Void)) {
         index = index - 1
         pageViewController.setViewControllers([controllers[index]], direction: .reverse, animated: true) { isFinished in
-            if isFinished {
-                completion()
-            }
+            completion()
         }
     }
     
     func animateToNextPage(completion: @escaping (()-> Void)) {
         index = index + 1
         pageViewController.setViewControllers([controllers[index]], direction: .forward, animated: true) { isFinished in
-            if isFinished {
-                completion()
-            }
+            completion()
         }
     }
     

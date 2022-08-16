@@ -156,13 +156,13 @@
                                     <segue destination="Mfl-xB-JXb" kind="embed" identifier="toPageViewController" id="fgs-ke-I5q"/>
                                 </connections>
                             </containerView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="eRr-50-Qgy">
-                                <rect key="frame" x="149" y="836" width="116" height="26"/>
-                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <pageControl opaque="NO" userInteractionEnabled="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="m17-b2-QKh">
+                                <rect key="frame" x="149.5" y="836" width="115.5" height="26"/>
+                                <color key="pageIndicatorTintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="currentPageIndicatorTintColor" systemColor="tintColor"/>
                             </pageControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y2M-PR-yZX">
-                                <rect key="frame" x="313" y="831" width="53" height="31"/>
+                                <rect key="frame" x="313" y="833.5" width="53" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="進む"/>
                                 <connections>
@@ -170,7 +170,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8GN-ZM-OWx">
-                                <rect key="frame" x="48" y="831" width="53" height="31"/>
+                                <rect key="frame" x="48" y="833.5" width="53" height="31"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="戻る"/>
                                 <connections>
@@ -181,22 +181,22 @@
                         <viewLayoutGuide key="safeArea" id="0rb-mC-eGW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="y2M-PR-yZX" firstAttribute="bottom" secondItem="8GN-ZM-OWx" secondAttribute="bottom" id="04l-ZH-CC0"/>
-                            <constraint firstItem="eRr-50-Qgy" firstAttribute="centerX" secondItem="fHf-fn-m5L" secondAttribute="centerX" id="Be4-eT-fSi"/>
-                            <constraint firstItem="eRr-50-Qgy" firstAttribute="bottom" secondItem="8GN-ZM-OWx" secondAttribute="bottom" id="Fng-DK-JB8"/>
+                            <constraint firstItem="m17-b2-QKh" firstAttribute="centerY" secondItem="8GN-ZM-OWx" secondAttribute="centerY" id="4EV-43-3dX"/>
                             <constraint firstItem="0rb-mC-eGW" firstAttribute="trailing" secondItem="y2M-PR-yZX" secondAttribute="trailing" constant="48" id="Jbh-tb-dDn"/>
                             <constraint firstAttribute="bottom" secondItem="Jbk-n0-edr" secondAttribute="bottom" id="Pqw-qN-Plu"/>
+                            <constraint firstItem="m17-b2-QKh" firstAttribute="bottom" secondItem="0rb-mC-eGW" secondAttribute="bottom" id="Ugs-NJ-hMK"/>
                             <constraint firstItem="8GN-ZM-OWx" firstAttribute="leading" secondItem="0rb-mC-eGW" secondAttribute="leading" constant="48" id="b03-r3-P94"/>
                             <constraint firstItem="Jbk-n0-edr" firstAttribute="leading" secondItem="fHf-fn-m5L" secondAttribute="leading" id="bYu-hs-LdQ"/>
                             <constraint firstItem="Jbk-n0-edr" firstAttribute="top" secondItem="fHf-fn-m5L" secondAttribute="top" id="enG-Ja-X6w"/>
                             <constraint firstAttribute="trailing" secondItem="Jbk-n0-edr" secondAttribute="trailing" id="jCK-DI-dwf"/>
-                            <constraint firstItem="0rb-mC-eGW" firstAttribute="bottom" secondItem="eRr-50-Qgy" secondAttribute="bottom" id="kjE-ic-sA0"/>
+                            <constraint firstItem="m17-b2-QKh" firstAttribute="centerX" secondItem="fHf-fn-m5L" secondAttribute="centerX" id="t55-J3-c8k"/>
+                            <constraint firstItem="y2M-PR-yZX" firstAttribute="centerY" secondItem="8GN-ZM-OWx" secondAttribute="centerY" id="u7v-6J-EGl"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="8GN-ZM-OWx" id="OJA-Iy-fSH"/>
                         <outlet property="nextButton" destination="y2M-PR-yZX" id="WKw-k3-4mg"/>
-                        <outlet property="pageControl" destination="eRr-50-Qgy" id="QnK-xc-rwp"/>
+                        <outlet property="pageControl" destination="m17-b2-QKh" id="ouG-Xv-JBF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Av-cZ-xXN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -238,7 +238,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="goV-fA-QUp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3115" y="1729"/>
+            <point key="canvasLocation" x="2896" y="1991"/>
         </scene>
         <!--SecondPage-->
         <scene sceneID="wZf-df-Hct">
@@ -265,7 +265,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Hby-qu-wf3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4039" y="1728"/>
+            <point key="canvasLocation" x="3667" y="1991"/>
         </scene>
         <!--ThirdPage-->
         <scene sceneID="KX2-FL-LeT">
@@ -292,7 +292,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n3D-rC-tSE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4896" y="1728"/>
+            <point key="canvasLocation" x="4451" y="1991"/>
         </scene>
         <!--1-->
         <scene sceneID="GON-sJ-Ady">

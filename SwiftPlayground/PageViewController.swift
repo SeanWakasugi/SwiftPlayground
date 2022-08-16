@@ -13,104 +13,100 @@ class RootPageViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     
-    var pageViewController: PageViewController!
-    
+    var pageViewController: UIPageViewController!
+    var controllers: [UIViewController] = []
+    var index: Int = 0
     var cacheIndex: Int?
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "toPageViewController" {
-            self.pageViewController = segue.destination as? PageViewController
-            pageViewController.delegate = self
-        }
-    }
-    
     override func viewDidLoad() {
-        pageControl.numberOfPages = pageViewController.controllers.count
+        pageControl.numberOfPages = controllers.count
         didMovePage()
-    }
-    
-    @IBAction func didPressBackButton(_ sender: UIButton) {
-        view.isUserInteractionEnabled = false
-        pageViewController.goPreviousPage() { [weak self] in
-            self?.didMovePage()
-        }
-    }
-    
-    @IBAction func didPressNextButton(_ sender: UIButton) {
-        view.isUserInteractionEnabled = false
-        pageViewController.goNextPage() { [weak self] in
-            self?.didMovePage()
-        }
-    }
-    
-    func didMovePage() {
-        pageControl.currentPage = pageViewController.index
-        if pageViewController.index == 0 {
-            backButton.isHidden = true
-        } else if pageViewController.index == pageViewController.controllers.count - 1 {
-            nextButton.isHidden = true
-        } else {
-            backButton.isHidden = false
-            nextButton.isHidden = false
-        }
-        view.isUserInteractionEnabled = true
-    }
-}
-
-extension RootPageViewController: UIPageViewControllerDelegate {
-    
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if completed {
-            self.pageViewController.index = cacheIndex!
-            didMovePage()
-        }
-    }
-    
-    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        if let index = self.pageViewController.controllers.firstIndex(of: pendingViewControllers.first!) {
-            cacheIndex = index
-        }
-    }
-}
-
-class PageViewController: UIPageViewController {
-    
-    var controllers: [UIViewController] = []
-    
-    var index: Int = 0
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        
+        // ContainerViewで持っているUIPageViewControllerをselfのpageViewControllerに設定
+        self.pageViewController = children.first! as? UIPageViewController
         
         let first = storyboard!.instantiateViewController(withIdentifier: "firstPage")
         let second = storyboard!.instantiateViewController(withIdentifier: "secondPage")
         let third = storyboard!.instantiateViewController(withIdentifier: "thirdPage")
         
         controllers = [first, second, third]
-        setViewControllers([controllers[index]], direction: .forward, animated: true)
-        dataSource = self
+        pageViewController.setViewControllers([controllers[index]], direction: .forward, animated: false)
+        pageViewController.dataSource = self
+        pageViewController.delegate = self
     }
     
-    func goPreviousPage(completion: @escaping (()-> Void)) {
+    @IBAction func didPressBackButton(_ sender: UIButton) {
+        // アニメーション中は画面を触れなくする
+        view.isUserInteractionEnabled = false
+        animateToPreviousPage() { [weak self] in
+            self?.didMovePage()
+            self?.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    @IBAction func didPressNextButton(_ sender: UIButton) {
+        view.isUserInteractionEnabled = false
+        animateToNextPage() { [weak self] in
+            self?.didMovePage()
+            self?.view.isUserInteractionEnabled = true
+        }
+    }
+    
+    func animateToPreviousPage(completion: @escaping (()-> Void)) {
         index = index - 1
-        setViewControllers([controllers[index]], direction: .reverse, animated: true) {isFinished in
+        pageViewController.setViewControllers([controllers[index]], direction: .reverse, animated: true) { isFinished in
             if isFinished {
                 completion()
             }
         }
     }
     
-    func goNextPage(completion: @escaping (()-> Void)) {
+    func animateToNextPage(completion: @escaping (()-> Void)) {
         index = index + 1
-        setViewControllers([controllers[index]], direction: .forward, animated: true) {isFinished in
+        pageViewController.setViewControllers([controllers[index]], direction: .forward, animated: true) { isFinished in
             if isFinished {
                 completion()
             }
+        }
+    }
+    
+    /// スワイプ、ボタンでのページ遷移終了後に呼ぶメソッド。
+    func didMovePage() {
+        pageControl.currentPage = index
+        if index == 0 {
+            backButton.isHidden = true
+        } else if index == controllers.count - 1 {
+            nextButton.isHidden = true
+        } else {
+            backButton.isHidden = false
+            nextButton.isHidden = false
         }
     }
 }
 
-extension PageViewController: UIPageViewControllerDataSource {
+extension RootPageViewController: UIPageViewControllerDelegate {
+    /// スワイプ操作が始まった時に呼ばれるメソッド。スワイプ中のボタン操作を無効にして、行き先画面のindexをcacheに入れておく
+    func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
+        backButton.isEnabled = false
+        nextButton.isEnabled = false
+        if let index = self.controllers.firstIndex(of: pendingViewControllers.first!) {
+            cacheIndex = index
+        }
+    }
+    
+    /// スワイプ操作によるアニメーションが終わった時に呼ばれるメソッド。ボタン操作を再び有効にして、もし遷移完了ならcacheをindexに適用
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        backButton.isEnabled = true
+        nextButton.isEnabled = true
+        if completed {
+            self.index = cacheIndex!
+            didMovePage()
+        }
+    }
+}
+
+extension RootPageViewController: UIPageViewControllerDataSource {
+    /// スワイプ操作における次の画面を渡すメソッド。その画面が最後の画面なら、nilを返して遷移不可とする
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if index < controllers.count - 1 {
             return controllers[index + 1]
@@ -119,6 +115,7 @@ extension PageViewController: UIPageViewControllerDataSource {
         }
     }
     
+    /// スワイプ操作における前の画面を渡すメソッド。その画面が最初の画面なら、nilを返して遷移不可とする
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if index > 0 {
             return controllers[index - 1]
